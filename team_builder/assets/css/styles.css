@@ -1,0 +1,12 @@
+.errorlist {
+    list-style: none;
+    padding-left: 0;
+}
+
+.errorlist li {
+    text-align: center;
+}
+
+.center-text {
+    text-align: center;
+}

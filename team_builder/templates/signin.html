@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  {% if error %}
+    <h2 class="center-text">Error: {{ error }}</h2>
+  {% endif %}
+  <div class="bounds">
+    <div class="grid-30 centered">
+      <h2>Sign In</h2>
+      <form action="" method="post">
+        {% csrf_token %}
+        <input type="email" placeholder="Email Address" name="email" required>
+        <input type="password" placeholder="Password" name="password" required>
+        <input type="submit" class="button-primary" value="Sign In">
+        <a class="button" href="{% url 'accounts:signup' %}">Sign Up</a>
+      </form>
+    </div>
+  </div>
+{% endblock %}

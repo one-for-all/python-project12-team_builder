@@ -1,0 +1,7 @@
+from django.contrib import admin
+
+from . import models
+
+
+admin.site.register(models.SiteProject)
+admin.site.register(models.Position)
