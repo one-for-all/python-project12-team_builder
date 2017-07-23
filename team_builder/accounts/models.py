@@ -67,7 +67,7 @@ class User(AbstractBaseUser):
 
 
 class Skill(models.Model):
-    name = models.CharField(max_length=140)
+    name = models.CharField(max_length=140, primary_key=True)
 
     def __str__(self):
         return self.name
@@ -80,7 +80,8 @@ class UserProfile(models.Model):
     name = models.CharField(max_length=255, blank=True, default='')
     bio = models.TextField(blank=True, default='')
     avatar = models.ImageField(null=True)
-    skills = models.ManyToManyField(Skill, related_name='user_profiles')
+    skills = models.ManyToManyField(Skill, related_name='user_profiles',
+                                    blank=True)
 
     def __str__(self):
         return "{}: {}".format(self.user.username, self.name)

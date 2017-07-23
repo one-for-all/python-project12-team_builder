@@ -10,6 +10,12 @@ $( document ).ready(function() {
     parent.after(copy);
     copy.find("input, textarea, select").val("");
     copy.find("*:first-child").focus();
+
+    /* position new class */
+    if (copy.attr('class') === 'position-existing') {
+      copy.attr('class', 'position-new');
+    }
+    
   });
 
   $(".circle--clone--list").on("click", "li:not(:only-child) .circle--clone--remove", function(){

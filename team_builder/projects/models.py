@@ -12,9 +12,11 @@ POSITION_STATUSES = (
 
 class Position(models.Model):
     title = models.CharField(max_length=140)
-    description = models.TextField()
+    description = models.TextField(blank=True, default='')
     status = models.SmallIntegerField(
-        choices=POSITION_STATUSES
+        choices=POSITION_STATUSES,
+        blank=True,
+        default=0
     )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -25,6 +27,7 @@ class Position(models.Model):
     project = models.ForeignKey(
         'SiteProject',
         related_name='positions',
+        on_delete=models.CASCADE
     )
     skill = models.ForeignKey(
         accounts_models.Skill,
@@ -41,8 +44,7 @@ class SiteProject(models.Model):
     title = models.CharField(max_length=140)
     description = models.TextField()
     timeline = models.CharField(max_length=255)
-    applicant_requirements = models.TextField()
-    url = models.URLField(null=True)
+    applicant_requirements = models.TextField(blank=True)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name='site_projects'

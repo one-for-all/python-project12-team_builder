@@ -1,0 +1,116 @@
+[
+{
+    "model": "accounts.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$GGUnvZzbntao$BhoPabVha6TJ4drfwuheZ8RWwr2JCAOFCz7y3MnkWlM=",
+        "last_login": "2017-07-23T07:37:44.971Z",
+        "email": "fixture@example.com",
+        "username": "fixture",
+        "is_active": true,
+        "is_admin": true
+    }
+},
+{
+    "model": "accounts.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$ORjbiIeJr4AQ$fNdviRZ6LTX7OmYwl/M8DRqk3hAl9lnQUNa1R1KoKkg=",
+        "last_login": null,
+        "email": "music@example.com",
+        "username": "music",
+        "is_active": true,
+        "is_admin": true
+    }
+},
+{
+    "model": "accounts.skill",
+    "pk": "acting",
+    "fields": {}
+},
+{
+    "model": "accounts.skill",
+    "pk": "compose",
+    "fields": {}
+},
+{
+    "model": "accounts.skill",
+    "pk": "filming",
+    "fields": {}
+},
+{
+    "model": "accounts.skill",
+    "pk": "sing",
+    "fields": {}
+},
+{
+    "model": "projects.siteproject",
+    "pk": 1,
+    "fields": {
+        "title": "Make a movie",
+        "description": "Make a fantastic movie.",
+        "timeline": "2 months",
+        "applicant_requirements": "Love movies.",
+        "owner": 1
+    }
+},
+{
+    "model": "projects.siteproject",
+    "pk": 2,
+    "fields": {
+        "title": "Hold a concert",
+        "description": "Hold a wonderful concert",
+        "timeline": "40 days",
+        "applicant_requirements": "Love music",
+        "owner": 2
+    }
+},
+{
+    "model": "projects.position",
+    "pk": 1,
+    "fields": {
+        "title": "Filmer",
+        "description": "Film the movie",
+        "status": 0,
+        "user": null,
+        "project": 1,
+        "skill": "filming"
+    }
+},
+{
+    "model": "projects.position",
+    "pk": 2,
+    "fields": {
+        "title": "Actor",
+        "description": "Act for the movie",
+        "status": 0,
+        "user": null,
+        "project": 1,
+        "skill": "acting"
+    }
+},
+{
+    "model": "projects.position",
+    "pk": 3,
+    "fields": {
+        "title": "Singer",
+        "description": "Sing with your heart",
+        "status": 0,
+        "user": null,
+        "project": 2,
+        "skill": "sing"
+    }
+},
+{
+    "model": "projects.position",
+    "pk": 4,
+    "fields": {
+        "title": "Composer",
+        "description": "Compose movie musics",
+        "status": 1,
+        "user": 2,
+        "project": 1,
+        "skill": "compose"
+    }
+}
+]

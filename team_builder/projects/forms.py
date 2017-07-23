@@ -5,7 +5,8 @@ from accounts import models as accounts_models
 
 
 class NewProjectForm(forms.Form):
-    def __init__(self, owner, positions, *args, **kwargs):
+    def __init__(self, project, owner, positions, *args, **kwargs):
+        self.project = project
         self.owner = owner
         self.positions = positions
         super().__init__(*args, **kwargs)
@@ -16,13 +17,16 @@ class NewProjectForm(forms.Form):
     applicant_requirements = fields.CharField()
 
     def save(self):
-        project = models.SiteProject.objects.create(
-            title=self.cleaned_data['title'],
-            description=self.cleaned_data['description'],
-            timeline=self.cleaned_data['timeline'],
-            applicant_requirements=self.cleaned_data["applicant_requirements"],
-            owner=self.owner
-        )
+        if self.project is None:
+            project = models.SiteProject.objects.create(owner=self.owner)
+        else:
+            project = self.project
+        project.title = self.cleaned_data['title']
+        project.description = self.cleaned_data['description']
+        project.timeline = self.cleaned_data['timeline']
+        project.applicant_requirements = self.cleaned_data[
+            "applicant_requirements"]
+        project.positions.all().delete()
         for title, description, skill in self.positions:
             try:
                 skill_object = accounts_models.Skill.objects.get(name=skill)
@@ -35,3 +39,4 @@ class NewProjectForm(forms.Form):
                 project=project,
                 skill=skill_object
             )
+        project.save()

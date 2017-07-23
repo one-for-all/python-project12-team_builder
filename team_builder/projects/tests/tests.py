@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 
-from . import models
+from projects import models
 
 
 def create_user():
@@ -44,3 +44,13 @@ class NewProjectViewTest(TestCase):
             owner=user
         )
         self.assertIsNotNone(project)
+
+
+class ViewProjectViewTest(TestCase):
+    def test_success_view(self):
+        user = create_user()
+        project = create_project(user)
+        resp = self.client.get(reverse('projects:view', kwargs={
+            'pk': project.id
+        }))
+        self.assertContains(resp, project.title)

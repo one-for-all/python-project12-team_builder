@@ -1,7 +1,8 @@
 {% extends 'layout.html' %}
+{% load static %}
 
 {% block content %}
-  <form action="" method="post">
+  <form id='form' action="" method="post">
     {% csrf_token %}
   <div class="circle--actions--bar">
     <div class="bounds">
@@ -23,15 +24,33 @@
   <div class="bounds circle--page circle--article">
     <div class="grid-70">
       <div class="circle--article--body">
-        <input name="title" type="text" class="circle--input--h1" placeholder="Project Title" />
-        <textarea name="description" placeholder="Project description..."></textarea>
+        <input name="title" type="text" class="circle--input--h1" placeholder="Project Title" value="{{ project.title }}">
+        <textarea name="description" placeholder="Project description...">{{ project.description }}</textarea>
       </div>
 
       <div class="circle--project--positions">
         <h2>Positions</h2>
 
         <ul class="circle--group--list circle--clone--list">
-          <li>
+          {% if project.positions %}
+          {% for position in project.positions.all %}
+          <li class='position-existing'>
+            <input name="position_title" type="text" class="circle--input--h3" placeholder="Position Title" value="{{ position.title }}">
+            <textarea name="position_description" placeholder="Position description...">{{ position.description }}</textarea>
+            {% if all_skills %}
+            <select name="skills">
+              <option value="">-------</option>
+              {% for skill in all_skills %}
+              <option value="{{ skill.name }}" {% if skill == position.skill %} selected {% endif %}>{{ skill.name }}</option>
+              {% endfor %}
+            </select>
+            {% endif %}
+            <a class="circle--clone--add">Add Position</a>
+            <a class="circle--clone--remove">Remove</a>
+          </li>
+          {% endfor %}
+          {% else %}
+          <li class='position-new'>
             <input name="position_title" type="text" class="circle--input--h3" placeholder="Position Title" />
             <textarea name="position_description" placeholder="Position description..."></textarea>
             {% if all_skills %}
@@ -45,6 +64,7 @@
             <a class="circle--clone--add">Add Position</a>
             <a class="circle--clone--remove">Remove</a>
           </li>
+          {% endif %}
         </ul>
         <input type="submit" class="button button-primary" value="Save Project">
       </div>
@@ -54,15 +74,19 @@
 
       <div class="circle--secondary--module">
         <h3>Project Timeline</h3>
-        <textarea name='timeline' placeholder="Time estimate" class="circle--textarea--input"></textarea>
+        <textarea name='timeline' placeholder="Time estimate" class="circle--textarea--input">{{ project.timeline }}</textarea>
       </div>
 
       <div class="circle--secondary--module">
         <h3>Applicant Requirements</h3>
-        <textarea name="applicant_requirements"></textarea>
+        <textarea name="applicant_requirements">{{ project.applicant_requirements }}</textarea>
       </div>
 
     </div>
   </div>
   </form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/profile_edit.js' %}"></script>
 {% endblock %}
