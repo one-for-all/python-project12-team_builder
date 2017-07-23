@@ -148,7 +148,6 @@ def profile_other(request, username):
                     username)
             }, status=status.HTTP_400_BAD_REQUEST)
         serializer = serializers.ProfileSerializer(instance=user_profile)
-        print(serializer.data)
         return Response({
             'success': True,
             'profile': serializer.data

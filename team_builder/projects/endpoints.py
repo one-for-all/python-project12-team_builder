@@ -44,33 +44,6 @@ def project(request, pk):
             'project': serializer.data
         }, status=status.HTTP_200_OK)
 
-    # Update project info for project with pk
-    # Condition: Current User is the owner of this project
-    # Accepts: Project Info Dictionary
-    # Returns:
-    #   SUCCESS: Project Page URL
-    #   ERROR: Error Message
-    if request.method == 'POST':
-        if site_project.owner != request.user:
-            return Response({
-                'success': False,
-                'error': 'User must be the owner to update the project'
-            }, status=status.HTTP_401_UNAUTHORIZED)
-        serializer = serializers.ProjectSerializer(instance=site_project,
-                                                   data=request.data,
-                                                   partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({
-                'success': True,
-                'project': serializer.data
-            }, status=status.HTTP_200_OK)
-        else:
-            return Response({
-                'success': False,
-                'project': serializer.errors
-            }, status=status.HTTP_400_BAD_REQUEST)
-
 
 def application_list(request):
     # Get a list of applications by/for current user that meet supplied

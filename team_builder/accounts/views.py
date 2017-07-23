@@ -57,7 +57,6 @@ def profile_edit(request):
     if not hasattr(request.user, 'profile'):
         models.UserProfile.objects.create(user=request.user)
     if request.method == 'POST':
-        print(request.POST)
         form = forms.ProfileForm(
             user_profile=request.user.profile,
             data=request.POST

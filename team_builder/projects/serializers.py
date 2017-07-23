@@ -19,6 +19,3 @@ class ProjectSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'owner': {'read_only': True}
         }
-
-    def update(self, instance, validated_data):
-        

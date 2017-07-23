@@ -73,36 +73,3 @@ class ProjectTest(APITestCase):
         titles = site_project.positions.all().values_list('title', flat=True)
         for position in resp.data['project']['positions']:
             self.assertIn(position['title'], titles)
-
-    def test_fail_get_non_existent_pk(self):
-        total_num = models.SiteProject.objects.count()
-        resp = self.client.get(reverse('projects:api_detail', kwargs={
-            'pk': total_num+1
-        }))
-        self.assertTrue(status.is_client_error(resp.status_code))
-
-    def test_success_post(self):
-        site_project = models.SiteProject.objects.order_by('?').first()
-        self.client.force_login(site_project.owner)
-        # Update timeline
-        resp = self.client.post(reverse('projects:api_detail', kwargs={
-            'pk': site_project.id}), data={
-            'timeline': '5 light years'
-        })
-        self.assertTrue(status.is_success(resp.status_code))
-        site_project.refresh_from_db()
-        self.assertEqual(site_project.timeline, '5 light years')
-        # Update Positions
-        existing_skill = accounts_models.Skill.objects.order_by('?').first()
-        resp = self.client.post(reverse('projects:api_detail', kwargs={
-            'pk': site_project.id}), data={
-            'positions': [{
-                'title': 'Tango Dancer',
-                'description': 'Tango with all your love',
-                'skill': existing_skill.name
-            }]
-        })
-        self.assertTrue(status.is_success(resp.status_code))
-        site_project.refresh_from_db()
-        self.assertEqual(site_project.positions.count(), 1)
-        self.assertEqual(site_project.positions.first().title, 'Tango Dancer')
