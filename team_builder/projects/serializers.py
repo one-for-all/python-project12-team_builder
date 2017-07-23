@@ -6,7 +6,10 @@ from . import models
 class PositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Position
-        fields = ['title', 'description', 'skill']
+        fields = ['id', 'title', 'description', 'skill']
+        extra_kwargs = {
+            'id': {'read_only': True}
+        }
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -37,6 +40,9 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Position
-        fields = ['title', 'description', 'status', 'applicant', 'project',
-                  'skill']
+        model = models.Application
+        fields = ['id', 'position', 'applicant', 'status']
+        extra_kwargs = {
+            'id': {'read_only': True},
+            'applicant': {'read_only': True}
+        }

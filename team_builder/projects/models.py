@@ -5,8 +5,7 @@ from accounts import models as accounts_models
 
 POSITION_STATUSES = (
     (0, 'vacant'),
-    (1, 'filled'),
-    (2, 'approved'),
+    (1, 'filled')
 )
 
 
@@ -17,12 +16,6 @@ class Position(models.Model):
         choices=POSITION_STATUSES,
         blank=True,
         default=0
-    )
-    applicant = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        related_name='positions',
-        null=True,
-        blank=True
     )
     project = models.ForeignKey(
         'SiteProject',
@@ -52,3 +45,24 @@ class SiteProject(models.Model):
 
     def __str__(self):
         return self.title
+
+
+APPLICATION_STATUSES = (
+    (0, 'pending'),
+    (1, 'accepted'),
+    (2, 'rejected')
+)
+
+
+class Application(models.Model):
+    position = models.ForeignKey(Position, related_name='applications')
+    applicant = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                  related_name='applications')
+    status = models.SmallIntegerField(choices=APPLICATION_STATUSES,
+                                      blank=True,
+                                      default=0)
+
+    def __str__(self):
+        return "{}: {} for {}".format(self.get_status_display(),
+                                      self.applicant,
+                                      self.position)

@@ -1,7 +1,8 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from django.shortcuts import reverse
+from django.shortcuts import reverse, get_object_or_404
 from django.contrib.auth import logout
 
 from . import serializers
@@ -59,6 +60,7 @@ def login_user(request):
 
 
 @api_view(['GET'])
+@permission_classes((IsAuthenticated, ))
 def logout_user(request):
     # Log Out an account
     # Condition: User Logged In
@@ -66,20 +68,15 @@ def logout_user(request):
     #   SUCCESS: Redirect Page
     #   ERROR: Error Message
     if request.method == 'GET':
-        if request.user.is_authenticated:
-            logout(request)
-            return Response({
-                'success': True,
-                'redirect_page': reverse('projects:home')
-            }, status=status.HTTP_200_OK)
-        else:
-            return Response({
-                'success': False,
-                'error': 'Logged In User Required'
-            }, status=status.HTTP_400_BAD_REQUEST)
+        logout(request)
+        return Response({
+            'success': True,
+            'redirect_page': reverse('projects:home')
+        }, status=status.HTTP_200_OK)
 
 
 @api_view(['GET', 'POST'])
+@permission_classes((IsAuthenticated, ))
 def profile(request):
     # Get profile information for current user
     # Condition: User Logged In
@@ -87,19 +84,13 @@ def profile(request):
     #   SUCCESS: Profile Info Dictionary
     #   ERROR: Error Message
     if request.method == 'GET':
-        if request.user.is_authenticated:
-            user_profile, _ = models.UserProfile.objects.get_or_create(
-                user=request.user)
-            serializer = serializers.ProfileSerializer(user_profile)
-            return Response({
-                'success': True,
-                'profile': serializer.data
-            }, status=status.HTTP_200_OK)
-        else:
-            return Response({
-                'success': False,
-                'error': 'Logged In User Required'
-            }, status=status.HTTP_400_BAD_REQUEST)
+        user_profile, _ = models.UserProfile.objects.get_or_create(
+            user=request.user)
+        serializer = serializers.ProfileSerializer(user_profile)
+        return Response({
+            'success': True,
+            'profile': serializer.data
+        }, status=status.HTTP_200_OK)
 
     # Update profile for current user; Create profile if not exists
     # Condition: User Logged In
@@ -108,26 +99,20 @@ def profile(request):
     #   SUCCESS: Account Profile URL
     #   ERROR: { Field: Error } Dictionary
     if request.method == 'POST':
-        if request.user.is_authenticated:
-            user_profile, _ = models.UserProfile.objects.get_or_create(
-                user=request.user)
-            serializer = serializers.ProfileSerializer(instance=user_profile,
-                                                       data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response({
-                    'success': True,
-                    'profile': serializer.data
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response({
-                    'success': False,
-                    'error': serializer.errors
-                }, status=status.HTTP_400_BAD_REQUEST)
+        user_profile, _ = models.UserProfile.objects.get_or_create(
+            user=request.user)
+        serializer = serializers.ProfileSerializer(instance=user_profile,
+                                                   data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                'success': True,
+                'profile': serializer.data
+            }, status=status.HTTP_200_OK)
         else:
             return Response({
                 'success': False,
-                'error': 'Logged In User Required'
+                'error': serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -138,15 +123,8 @@ def profile_other(request, username):
     #   SUCCESS: User Profile Info Dictionary
     #   ERROR: Error Message
     if request.method == 'GET':
-        try:
-            user_profile = models.UserProfile.objects.get(
-                user__username=username)
-        except models.UserProfile.DoesNotExist:
-            return Response({
-                'success': False,
-                'error': 'No profile for user with username "{}"'.format(
-                    username)
-            }, status=status.HTTP_400_BAD_REQUEST)
+        user_profile = get_object_or_404(models.UserProfile,
+                                         user__username=username)
         serializer = serializers.ProfileSerializer(instance=user_profile)
         return Response({
             'success': True,

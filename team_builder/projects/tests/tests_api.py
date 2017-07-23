@@ -8,7 +8,7 @@ from accounts import models as accounts_models
 
 
 class ProjectListTest(APITestCase):
-    fixtures = ['fixture_0001.json']
+    fixtures = ['fixture_0002.json']
 
     @classmethod
     def setUpTestData(cls):
@@ -90,7 +90,7 @@ class ProjectListTest(APITestCase):
 
 
 class ProjectTest(APITestCase):
-    fixtures = ['fixture_0001.json']
+    fixtures = ['fixture_0002.json']
 
     @classmethod
     def setUpTestData(cls):
@@ -110,3 +110,139 @@ class ProjectTest(APITestCase):
         titles = site_project.positions.all().values_list('title', flat=True)
         for position in resp.data['project']['positions']:
             self.assertIn(position['title'], titles)
+
+
+class ApplicationListTest(APITestCase):
+    fixtures = ['fixture_0002.json']
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = get_user_model().objects.create_user(
+            username='admin',
+            email='admin@example.com',
+            password='admin_you_cannot_guess_it'
+        )
+
+    def test_success_post(self):
+        self.client.force_login(self.user)
+        position = models.Position.objects.order_by('?').first()
+        resp = self.client.post(reverse('projects:api_application_list'),
+                                data={'position_id': position.id})
+        self.assertTrue(status.is_success(resp.status_code))
+        application_id = resp.data['application']['id']
+        application = models.Application.objects.get(pk=application_id)
+        self.assertEqual(application.applicant, self.user)
+
+    def test_success_list_by(self):
+        user = get_user_model().objects.order_by('?').first()
+        self.client.force_login(user)
+        resp = self.client.get(reverse('projects:api_application_list'),
+                               data={'relation': 'by'})
+        self.assertTrue(status.is_success(resp.status_code))
+        for application_data in resp.data['applications']:
+            self.assertEqual(application_data['applicant'], user.id)
+
+    def test_success_list_for(self):
+        user = get_user_model().objects.order_by('?').first()
+        self.client.force_login(user)
+        resp = self.client.get(reverse('projects:api_application_list'),
+                               data={'relation': 'for'})
+        self.assertTrue(status.is_success(resp.status_code))
+        for application_data in resp.data['applications']:
+            position_id = application_data['position']
+            position = models.Position.objects.get(pk=position_id)
+            self.assertEqual(position.project.owner, user)
+
+    def test_fail_list_no_user(self):
+        resp = self.client.get(reverse('projects:api_application_list'),
+                               data={'relation': 'for'})
+        self.assertTrue(status.is_client_error(resp.status_code))
+        resp = self.client.get(reverse('projects:api_application_list'),
+                               data={'relation': 'by'})
+        self.assertTrue(status.is_client_error(resp.status_code))
+
+
+class ApplicationDetailTest(APITestCase):
+    fixtures = ['fixture_0002.json']
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = get_user_model().objects.create_user(
+            username='admin',
+            email='admin@example.com',
+            password='admin_you_cannot_guess_it'
+        )
+
+    def test_fail_get_invalid_id(self):
+        count = models.Application.objects.count()
+        resp = self.client.get(reverse('projects:api_application', kwargs={
+            'pk': count+1
+        }))
+        self.assertTrue(status.is_client_error(resp.status_code))
+
+    def test_success_get(self):
+        application = models.Application.objects.order_by('?').first()
+        resp = self.client.get(reverse('projects:api_application', kwargs={
+            'pk': application.id
+        }))
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertEqual(resp.data['application']['status'],
+                         application.status)
+        self.assertEqual(resp.data['application']['applicant'], application.applicant.id)
+
+    def test_success_retract(self):
+        application = models.Application.objects.order_by('?').first()
+        user = application.applicant
+        self.client.force_login(user)
+        resp = self.client.post(reverse('projects:api_application', kwargs={
+            'pk': application.id
+        }), data={'action': 'retract'})
+        self.assertTrue(status.is_success(resp.status_code))
+        application = models.Application.objects.filter(pk=application.id)
+        self.assertFalse(application)
+
+    def test_fail_retract_not_applicant(self):
+        application = models.Application.objects.order_by('?').first()
+        self.client.force_login(self.user)
+        resp = self.client.post(reverse('projects:api_application', kwargs={
+            'pk': application.id
+        }), data={'action': 'retract'})
+        self.assertTrue(status.is_client_error(resp.status_code))
+
+    def test_success_accept(self):
+        application = models.Application.objects.order_by('?').first()
+        user = application.position.project.owner
+        self.client.force_login(user)
+        resp = self.client.post(reverse('projects:api_application', kwargs={
+            'pk': application.id
+        }), data={'action': 'accept'})
+        self.assertTrue(status.is_success(resp.status_code))
+        application.refresh_from_db()
+        self.assertEqual(application.status, 1)
+
+    def test_fail_accept_not_owner(self):
+        application = models.Application.objects.order_by('?').first()
+        self.client.force_login(self.user)
+        resp = self.client.post(reverse('projects:api_application', kwargs={
+            'pk': application.id
+        }), data={'action': 'accept'})
+        self.assertTrue(status.is_client_error(resp.status_code))
+
+    def test_success_reject(self):
+        application = models.Application.objects.order_by('?').first()
+        user = application.position.project.owner
+        self.client.force_login(user)
+        resp = self.client.post(reverse('projects:api_application', kwargs={
+            'pk': application.id
+        }), data={'action': 'reject'})
+        self.assertTrue(status.is_success(resp.status_code))
+        application.refresh_from_db()
+        self.assertEqual(application.status, 2)
+
+    def test_fail_reject_not_owner(self):
+        application = models.Application.objects.order_by('?').first()
+        self.client.force_login(self.user)
+        resp = self.client.post(reverse('projects:api_application', kwargs={
+            'pk': application.id
+        }), data={'action': 'reject'})
+        self.assertTrue(status.is_client_error(resp.status_code))

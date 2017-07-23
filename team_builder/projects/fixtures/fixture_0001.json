@@ -72,7 +72,6 @@
         "title": "Filmer",
         "description": "Film the movie",
         "status": 0,
-        "user": null,
         "project": 1,
         "skill": "filming"
     }
@@ -84,7 +83,6 @@
         "title": "Actor",
         "description": "Act for the movie",
         "status": 0,
-        "user": null,
         "project": 1,
         "skill": "acting"
     }
@@ -96,7 +94,6 @@
         "title": "Singer",
         "description": "Sing with your heart",
         "status": 0,
-        "user": null,
         "project": 2,
         "skill": "sing"
     }
@@ -108,7 +105,6 @@
         "title": "Composer",
         "description": "Compose movie musics",
         "status": 1,
-        "user": 2,
         "project": 1,
         "skill": "compose"
     }
