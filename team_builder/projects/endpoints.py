@@ -1,13 +1,15 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from django.urls import reverse
 
 from . import models
 from . import serializers
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def project_list(request):
+    # Current: Lists all projects
     # List projects that meet supplied condition
     # Accepts: Condition Dictionary
     # Returns:
@@ -22,8 +24,32 @@ def project_list(request):
             'projects': serializer.data
         }, status=status.HTTP_200_OK)
 
+    # Post a new project by current user
+    # Condition: User Logged In
+    # Accepts: Project Info Dictionary
+    # Returns:
+    #   SUCCESS: Project Info, Project Detail URL
+    #   ERROR: Error message
+    if request.method == 'POST':
+        serializer = serializers.ProjectSerializer(data=request.data,
+                                                   context={
+                                                       'owner': request.user
+                                                   })
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                'success': True,
+                'project': serializer.data,
+                'project_url': reverse('projects:view', kwargs={
+                    'pk': serializer.data.get('id')})
+            }, status=status.HTTP_201_CREATED)
+        else:
+            return Response({
+                'success': False,
+                'error': serializer.errors
+            })
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def project(request, pk):
     try:
         site_project = models.SiteProject.objects.get(pk=pk)

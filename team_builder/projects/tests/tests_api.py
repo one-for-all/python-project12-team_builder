@@ -51,6 +51,43 @@ class ProjectListTest(APITestCase):
         resp_projects = resp.data.get('projects')
         self.assertEqual(len(projects), len(resp_projects))
 
+    def test_success_post(self):
+        self.client.force_login(self.user)
+        existing_skill = accounts_models.Skill.objects.first()
+        resp = self.client.post(reverse('projects:api_list'), data={
+            'title': 'Publish an album',
+            'description': 'Produce a great album',
+            'timeline': '2 months',
+            'applicant_requirements': '',
+            'positions': [{
+                'title': 'Singer',
+                'description': 'Sing for the album',
+                'skill': existing_skill.name
+            }]
+        })
+        self.assertTrue(status.is_success(resp.status_code))
+        projects = models.SiteProject.objects.filter(title='Publish an album',
+                                                    owner=self.user)
+        self.assertTrue(projects)
+        position = models.Position.objects.filter(title='Singer',
+                                                  project__in=projects)
+        self.assertTrue(position)
+
+    def test_fail_post_nouser(self):
+        existing_skill = accounts_models.Skill.objects.first()
+        resp = self.client.post(reverse('projects:api_list'), data={
+            'title': 'Publish an album',
+            'description': 'Produce a great album',
+            'timeline': '2 months',
+            'applicant_requirements': '',
+            'positions': [{
+                'title': 'Singer',
+                'description': 'Sing for the album',
+                'skill': existing_skill.name
+            }]
+        })
+        self.assertTrue(status.is_client_error(resp.status_code))
+
 
 class ProjectTest(APITestCase):
     fixtures = ['fixture_0001.json']

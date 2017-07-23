@@ -5,8 +5,8 @@ from accounts import models as accounts_models
 
 POSITION_STATUSES = (
     (0, 'vacant'),
-    (1, 'applied'),
-    (2, 'filled')
+    (1, 'filled'),
+    (2, 'approved'),
 )
 
 
@@ -18,7 +18,7 @@ class Position(models.Model):
         blank=True,
         default=0
     )
-    user = models.ForeignKey(
+    applicant = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name='positions',
         null=True,
