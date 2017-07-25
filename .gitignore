@@ -4,3 +4,4 @@ project12_env
 .jshintrc
 .tern-project
 __pycache__
+node_modules

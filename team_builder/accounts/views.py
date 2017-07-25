@@ -6,6 +6,10 @@ from django.contrib.auth import authenticate, login, logout
 from . import forms
 from . import models
 
+##########################################
+# Refactor to use api
+##########################################
+
 
 def signup(request):
     if request.method == 'POST':

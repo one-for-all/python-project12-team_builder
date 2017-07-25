@@ -30,7 +30,7 @@ def signup(request):
             return Response({
                 'success': False,
                 'error': serializer.errors
-            }, status=status.HTTP_400_BAD_REQUEST)
+            }, status=status.HTTP_409_CONFLICT)
 
 
 @api_view(['POST'])
