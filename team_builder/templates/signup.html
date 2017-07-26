@@ -2,16 +2,8 @@
 {% load static %}
 
 {% block content %}
-  {% if form_errors %}
-    <h2 class="center-text">Error:</h2>
-    {% for field, error in form_errors.items %}
-    <div class="grid-30 centered">
-      {{ error }}
-    </div>
-    {% endfor %}
-  {% endif %}
-  <div class="bounds">
-    <div class="grid-30 centered">
+  <div id='body' class="bounds">
+    <div id='top' class="grid-30 centered">
       <h2>Sign Up</h2>
       <form id='form' action='' method="post">
         {% csrf_token %}
@@ -27,5 +19,6 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="{% static 'js/utilities.js' %}" charset="utf-8"></script>
 <script src="{% static 'js/signup.js' %}" charset="utf-8"></script>
 {% endblock %}

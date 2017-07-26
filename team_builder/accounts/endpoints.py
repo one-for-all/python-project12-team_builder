@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import reverse, get_object_or_404
 from django.contrib.auth import logout
 
@@ -18,6 +19,7 @@ def signup(request):
     #   SUCCESS: Account Profile URL
     #   ERROR: { Field: Error }  Dictionary
     if request.method == 'POST':
+        print(request.data)
         serializer = serializers.UserCreationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -99,6 +101,7 @@ def profile(request):
     #   SUCCESS: Account Profile URL
     #   ERROR: { Field: Error } Dictionary
     if request.method == 'POST':
+        print(request.data)
         user_profile, _ = models.UserProfile.objects.get_or_create(
             user=request.user)
         serializer = serializers.ProfileSerializer(instance=user_profile,

@@ -1,10 +1,10 @@
 {
   "name": "team_builder",
   "version": "1.0.0",
-  "description": "",
+  "description": "team builder site",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "phantomjs ./node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js test/*.html"
   },
   "author": "Jay Li",
   "license": "ISC",
@@ -12,5 +12,19 @@
     "chai": "^4.1.0",
     "mocha": "^3.4.2",
     "sinon": "^2.3.8"
+  },
+  "standard": {
+    "globals": [
+      "XMLHttpRequest",
+      "Cookies",
+      "expect",
+      "assert",
+      "sinon",
+      "utilities",
+      "signupModule",
+      "signinModule",
+      "profileEditModule",
+      "projectNewModule"
+    ]
   }
 }

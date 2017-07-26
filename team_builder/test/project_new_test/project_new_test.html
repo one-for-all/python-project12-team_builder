@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Project New Test</title>
+  <link href="../../node_modules/mocha/mocha.css" rel="stylesheet" />
+  <style media="screen">
+    #hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id='hidden'>
+    <form id='form' action="" method="post">
+      {% csrf_token %}
+    <div class="circle--actions--bar">
+      <div class="bounds">
+        <div class="grid-100">
+          <input type="submit" class="button button-primary" value="Save Project">
+          <a class="button button-text" href="{% url 'projects:home' %}">Discard</a>
+        </div>
+      </div>
+    </div>
+
+    {% if form_errors %}
+      <h2 class="center-text">Error:</h2>
+      {% for field, error in form_errors.items %}
+      <div class="grid-30 centered">
+        {{ field }}: {{ error }}
+      </div>
+      {% endfor %}
+    {% endif %}
+    <div class="bounds circle--page circle--article">
+      <div class="grid-70">
+        <div class="circle--article--body">
+          <input name="title" type="text" class="circle--input--h1" placeholder="Project Title" value="{{ project.title }}">
+          <textarea name="description" placeholder="Project description...">{{ project.description }}</textarea>
+        </div>
+
+        <div class="circle--project--positions">
+          <h2>Positions</h2>
+
+          <ul class="circle--group--list circle--clone--list">
+            {% if project.positions %}
+            {% for position in project.positions.all %}
+            <li class='position-existing'>
+              <input name="position_title" type="text" class="circle--input--h3" placeholder="Position Title" value="{{ position.title }}">
+              <textarea name="position_description" placeholder="Position description...">{{ position.description }}</textarea>
+              {% if all_skills %}
+              <select name="skills">
+                <option value="">-------</option>
+                {% for skill in all_skills %}
+                <option value="{{ skill.name }}" {% if skill == position.skill %} selected {% endif %}>{{ skill.name }}</option>
+                {% endfor %}
+              </select>
+              {% endif %}
+              <a class="circle--clone--add">Add Position</a>
+              <a class="circle--clone--remove">Remove</a>
+            </li>
+            {% endfor %}
+            {% else %}
+            <li class='position-new'>
+              <input name="position_title" type="text" class="circle--input--h3" placeholder="Position Title" />
+              <textarea name="position_description" placeholder="Position description..."></textarea>
+              {% if all_skills %}
+              <select name="skills">
+                <option value="">-------</option>
+                {% for skill in all_skills %}
+                <option value="{{ skill.name }}">{{ skill.name }}</option>
+                {% endfor %}
+              </select>
+              {% endif %}
+              <a class="circle--clone--add">Add Position</a>
+              <a class="circle--clone--remove">Remove</a>
+            </li>
+            {% endif %}
+          </ul>
+          <input type="submit" class="button button-primary" value="Save Project">
+        </div>
+      </div>
+
+      <div class="grid-25 grid-push-5">
+
+        <div class="circle--secondary--module">
+          <h3>Project Timeline</h3>
+          <textarea name='timeline' placeholder="Time estimate" class="circle--textarea--input">{{ project.timeline }}</textarea>
+        </div>
+
+        <div class="circle--secondary--module">
+          <h3>Applicant Requirements</h3>
+          <textarea name="applicant_requirements">{{ project.applicant_requirements }}</textarea>
+        </div>
+
+      </div>
+    </div>
+    </form>
+  </div>
+  <div id="mocha"></div>
+  <script src="../../node_modules/mocha/mocha.js"></script>
+  <script src="../../node_modules/chai/chai.js"></script>
+  <script src="../../node_modules/sinon/pkg/sinon.js"></script>
+  <script>
+    mocha.ui('bdd');
+    mocha.reporter('html');
+    const expect = chai.expect;
+    const assert = chai.assert;
+  </script>
+  <script src="../../assets/js/js.cookie.js"></script>
+  <script src="../../assets/js/utilities.js"></script>
+  <script src="../../assets/js/project_new.js"></script>
+  <script src="project_new_test.js"></script>
+  <script>
+    mocha.run();
+  </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Utilities Test</title>
+  <link href="../../node_modules/mocha/mocha.css" rel="stylesheet" />
+  <style media="screen">
+    #hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id='hidden'>
+    <div id='body' class="bounds">
+      <div id='top' class="grid-30 centered">
+        <h2>Test</h2>
+      </div>
+    </div>
+  </div>
+  <div id="mocha"></div>
+  <script src="../../node_modules/mocha/mocha.js"></script>
+  <script src="../../node_modules/chai/chai.js"></script>
+  <script src="../../node_modules/sinon/pkg/sinon.js"></script>
+  <script>
+    mocha.ui('bdd');
+    mocha.reporter('html');
+    const expect = chai.expect;
+    const assert = chai.assert;
+  </script>
+  <script src="../../assets/js/utilities.js"></script>
+  <script src="utilities_test.js"></script>
+  <script>
+    mocha.run();
+  </script>
+</body>
+</html>

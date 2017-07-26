@@ -10,6 +10,8 @@ urlpatterns = [
     url(r'^logout/$', views.logout_user, name='logout'),
     url(r'^profile/$', views.profile, name='profile'),
     url(r'^profile_edit/$', views.profile_edit, name='profile_edit'),
+    url(r'^profile/(?P<username>[_\d\w]+)/$', views.profile_other,
+        name='profile_other'),
     # Endpoints
     url(r'^api/v1/signup/$', endpoints.signup, name='api_signup'),
     url(r'^api/v1/login/$', endpoints.login_user, name='api_login'),

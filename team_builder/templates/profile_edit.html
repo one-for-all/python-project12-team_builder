@@ -1,27 +1,20 @@
 {% extends 'layout.html' %}
+{% load static %}
 
 {% block content %}
   <div class="circle--actions--bar">
     <nav class="bounds">
       <ul class="circle--pill--list">
-        <li><a href="applications.html">Applications</a></li>
+        <li><a href="{% url 'projects:applications' %}">Applications</a></li>
         <li><a class="selected" href="{% url 'accounts:profile' %}">Profile</a></li>
       </ul>
     </nav>
   </div>
 
-  {% if form_errors %}
-    <h2 class="center-text">Error:</h2>
-    {% for field, error in form_errors.items %}
-    <div class="grid-30 centered">
-      {{field }}: {{ error }}
-    </div>
-    {% endfor %}
-  {% endif %}
-  <form action="" method="post">
+  <form id='form' action="" method="post">
     {% csrf_token %}
-  <div class="bounds circle--page">
-    <div class="circle--page--header circle--fluid">
+  <div id='body' class="bounds circle--page">
+    <div id='top' class="circle--page--header circle--fluid">
       <div class="circle--fluid--cell circle--fluid--primary">
         <h2>Profile</h2>
       </div>
@@ -31,9 +24,9 @@
     </div>
 
     <div class="grid-70">
-      <input name="name" type="text" value="{{ user.profile.name }}" placeholder="Full Name" class="circle--input--h1">
+      <input id='name' name="name" type="text" value="{{ user.profile.name }}" placeholder="Full Name" class="circle--input--h1">
       <div class="circle--article--body">
-        <textarea name="bio" id="bio" placeholder="Tell us about yourself...">{{ user.profile.bio }}</textarea>
+        <textarea id='bio' name="bio" id="bio" placeholder="Tell us about yourself...">{{ user.profile.bio }}</textarea>
       </div>
 
       <h2>Past Projects</h2>
@@ -78,7 +71,7 @@
           {% if user.profile.skills.all %}
             {% for skill in user.profile.skills.all %}
             <li>
-              <select name="skills">
+              <select class='skills' name="skills">
                 <option value="">-------</option>
                 {% for skill_instance in all_skills %}
                 <option value="{{ skill_instance.name }}"
@@ -94,7 +87,7 @@
             {% endfor %}
           {% else %}
             <li>
-              <select name="skills">
+              <select class='skills' name="skills">
                 <option value="">-------</option>
                 {% for skill_instance in all_skills %}
                 <option value="{{ skill_instance.name }}">{{ skill_instance.name }}</option>
@@ -122,14 +115,8 @@
   </form>
 {% endblock %}
 
-<!--{% block scripts %}-->
-<!--<script type = "text/JavaScript">-->
-  <!--$('#save').click( () => {-->
-    <!--console.log('clicked');-->
-    <!--$.post('', {-->
-      <!--name: $("#name").val(),-->
-      <!--bio: $("#bio").text(),-->
-    <!--});-->
-  <!--});-->
-<!--</script>-->
-<!--{% endblock %}-->
+{% block scripts %}
+<script src="{% static 'js/js.cookie.js' %}" charset="utf-8"></script>
+<script src="{% static 'js/utilities.js' %}" charset="utf-8"></script>
+<script src="{% static 'js/profile_edit.js' %}" charset="utf-8"></script>
+{% endblock %}

@@ -78,5 +78,6 @@ class ProfileSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         if kwargs.get('data'):
             for skill in kwargs.get('data').get('skills'):
-                models.Skill.objects.get_or_create(name=skill)
+                if not skill.isspace():
+                    models.Skill.objects.get_or_create(name=skill)
         super().__init__(*args, **kwargs)

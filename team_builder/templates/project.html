@@ -1,11 +1,11 @@
 {% extends 'layout.html' %}
+{% load static %}
 
 {% block content %}
   <div class="circle--actions--bar">
     <div class="bounds">
       <div class="grid-100">
         {% if project.owner == user %}
-        <a class="button" href="{% url 'projects:edit' pk=project.id %}">Edit Project</a>
         <a class="button button-text" href="index.html">Delete Project</a>
         {% endif %}
       </div>
@@ -17,7 +17,13 @@
       <div class="circle--article--header">
         <h4 class="circle--article--section">Project</h4>
         <h1 class="circle--article--title">{{ project.title }}</h1>
-        <p class="circle--article--byline">Project Owner: <a>{{ project.owner.profile.name }}</a></p>
+        <p class="circle--article--byline">Project Owner: <a>
+          {% if project.owner.profile.name %}
+          {{ project.owner.profile.name }}
+          {% else %}
+          {{ project.owner.username }}
+          {% endif %}
+        </a></p>
       </div>
 
       <div class="circle--article--body">
@@ -69,4 +75,9 @@
 
     </div>
   </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/utilities.js' %}"></script>
+<script src="{% static 'js/profile_view.js' %}"></script>
 {% endblock %}

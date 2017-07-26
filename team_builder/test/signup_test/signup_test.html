@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Signup Test</title>
+  <link href="../../node_modules/mocha/mocha.css" rel="stylesheet" />
+  <style media="screen">
+    #hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id='hidden'>
+    <div id='body' class="bounds">
+      <div id='top' class="grid-30 centered">
+        <h2>Sign Up</h2>
+        <form id='form' action='' method="post">
+          {% csrf_token %}
+          <input id='username' type="text" placeholder="Username" name="username" required>
+          <input id='email' type="email" placeholder="Email Address" name="email" required>
+          <input id='password' type="password" placeholder="Password" name="password" required>
+          <input id='confirm_password' type="password" placeholder="Confirm Password" name="confirm_password" required>
+          <input type="submit" class="button-primary" value="Sign Up">
+          <a class="button" href="{% url 'accounts:signin' %}">Sign In</a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div id="mocha"></div>
+  <script src="../../node_modules/mocha/mocha.js"></script>
+  <script src="../../node_modules/chai/chai.js"></script>
+  <script src="../../node_modules/sinon/pkg/sinon.js"></script>
+  <script>
+    mocha.ui('bdd');
+    mocha.reporter('html');
+    const expect = chai.expect;
+    const assert = chai.assert;
+  </script>
+  <script src="../../assets/js/js.cookie.js"></script>
+  <script src="../../assets/js/utilities.js"></script>
+  <script src="../../assets/js/signup.js"></script>
+  <script src="signup_test.js"></script>
+  <script>
+    mocha.run();
+  </script>
+</body>
+</html>
