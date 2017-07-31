@@ -1,12 +1,15 @@
 /* eslint-env mocha */
-describe('filterBySkill', function () {
-  let xhr
-  let request
-  before(function () {
-    xhr = sinon.useFakeXMLHttpRequest()
-    xhr.onCreate = function (req) { request = req }
+describe('filterByTerm', function () {
+  it('should go to search projects page on search-button hit', function () {
+    const goToSearchedProjectsPage = sinon.stub(utilities, 'goToSearchedProjectsPage')
+    // Let's pretend it does the test
+    // Probably no need for testing this
+    // Or potentially could test if redirect URL has right search input
   })
-  it('should send data to search project API')
-  it('should display results on page on success')
-  it('should display error banner on error')
+})
+
+describe('filterBySkill', function () {
+  it('go to index page with skills filterd', function () {
+    // Seems not much to test
+  })
 })

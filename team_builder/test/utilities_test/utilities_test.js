@@ -14,6 +14,3 @@ describe('bannerErrorMessage', function () {
   })
 })
 
-describe('goToSearchedProjectsPage', function () {
-  it('should parse search term and make a GET request to project URL with this term')
-})

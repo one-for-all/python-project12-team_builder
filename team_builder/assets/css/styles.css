@@ -14,3 +14,17 @@ a {
 .center-text {
     text-align: center;
 }
+
+.circle--primary--avatar {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.avatar-collapse::before {
+  padding-top: 0;
+}
+
+.profile-avatar {
+  width: 100%;
+}

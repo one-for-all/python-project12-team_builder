@@ -19,7 +19,6 @@ def signup(request):
     #   SUCCESS: Account Profile URL
     #   ERROR: { Field: Error }  Dictionary
     if request.method == 'POST':
-        print(request.data)
         serializer = serializers.UserCreationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -101,7 +100,6 @@ def profile(request):
     #   SUCCESS: Account Profile URL
     #   ERROR: { Field: Error } Dictionary
     if request.method == 'POST':
-        print(request.data)
         user_profile, _ = models.UserProfile.objects.get_or_create(
             user=request.user)
         serializer = serializers.ProfileSerializer(instance=user_profile,
@@ -117,6 +115,16 @@ def profile(request):
                 'success': False,
                 'error': serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST'])
+def profile_avatar(request):
+    avatar = request.FILES.get('avatar')
+    request.user.profile.avatar = avatar
+    request.user.profile.save()
+    return Response({
+
+    }, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])

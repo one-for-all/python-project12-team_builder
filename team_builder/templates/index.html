@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% load static %}
 
 {% block content %}
   <div class="bounds circle--page">
@@ -24,7 +25,7 @@
         <ul class="circle--filter--list">
           <li><a class="selected">All Needs</a></li>
           {% for skill in all_skills %}
-          <li><a>{{ skill.name }}</a></li>
+          <li><a class='skill-filter'>{{ skill.name }}</a></li>
           {% endfor %}
         </ul>
       </div>
@@ -56,4 +57,8 @@
       </table>
     </div>
   </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/index.js' %}" charset="utf-8"></script>
 {% endblock %}

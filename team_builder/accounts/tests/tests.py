@@ -14,47 +14,6 @@ def create_test_user():
     )
 
 
-class SignInViewTest(TestCase):
-    def test_invalid_signin(self):
-        resp = self.client.post(
-            reverse('accounts:signin'),
-            data={
-                'email': 'test@example.com',
-                'password': 'password'
-            }
-        )
-        self.assertContains(resp, 'Error')
-        user = get_user(self.client)
-        self.assertFalse(user.is_authenticated)
-
-    def test_valid_signin(self):
-        create_test_user()
-        self.client.post(
-            reverse('accounts:signin'),
-            data={
-                'email': 'test@example.com',
-                'password': 'password'
-            }
-        )
-        user = get_user(self.client)
-        self.assertTrue(user.is_authenticated)
-
-
-class LogOutViewTest(TestCase):
-    def test_success_logout(self):
-        create_test_user()
-        self.client.post(
-            reverse('accounts:signin'),
-            data={
-                'email': 'test@example.com',
-                'password': 'password'
-            }
-        )
-        self.client.get(reverse('accounts:logout'))
-        user = get_user(self.client)
-        self.assertFalse(user.is_authenticated)
-
-
 class ProfileViewTest(TestCase):
     def test_empty_profile_creation(self):
         user = create_test_user()

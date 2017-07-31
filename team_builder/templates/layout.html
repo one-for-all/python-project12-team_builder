@@ -52,6 +52,11 @@
     <script type="text/javascript" src="{% static 'js/global.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/utilities.js' %}"></script>
     <script>
+      document.getElementById('search-projects').addEventListener('keyup', function (event) {
+        if (event.keyCode == 13) {
+          document.getElementById("search-button").click()
+        }
+      })
       document.getElementById('search-button').onclick = function () {
         utilities.goToSearchedProjectsPage()
       }

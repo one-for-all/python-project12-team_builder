@@ -79,7 +79,7 @@ class UserProfile(models.Model):
                                 related_name='profile')
     name = models.CharField(max_length=255, blank=True, default='')
     bio = models.TextField(blank=True, default='')
-    avatar = models.ImageField(null=True)
+    avatar = models.ImageField(null=True, upload_to='avatars')
     skills = models.ManyToManyField(Skill, related_name='user_profiles',
                                     blank=True)
 

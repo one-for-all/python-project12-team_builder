@@ -19,5 +19,7 @@ urlpatterns = [
     url(r'^api/v1/profile/$', endpoints.profile, name='api_profile'),
     url(r'^api/v1/profile/(?P<username>[_\w]+)/$', endpoints.profile_other,
         name='api_profile_other'),
+    url(r'^api/v1/avatar/$', endpoints.profile_avatar,
+        name='api_profile_avatar'),
 
 ]

@@ -228,7 +228,7 @@ class ApplicationDetailTest(APITestCase):
         self.client.force_login(user)
         resp = self.client.post(reverse('projects:api_application', kwargs={
             'pk': application.id
-        }), data={'action': 'accept'})
+        }), data={'action': 'approve'})
         self.assertTrue(status.is_success(resp.status_code))
         application.refresh_from_db()
         self.assertEqual(application.status, 1)

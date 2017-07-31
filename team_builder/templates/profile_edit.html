@@ -57,10 +57,14 @@
     <div class="grid-25 grid-push-5">
 
       <div class="circle--secondary--module">
-        <div class="circle--primary--avatar">
-          <a class="button">
+        <div id='avatar' class="circle--primary--avatar"
+        {% if user.profile.avatar %}
+        style="background-image: url('{{ user.profile.avatar.url }}')"
+        {% endif %}
+        >
+          <a id='upload-image-button' class="button">
             Upload Photo
-            <input type="file">
+            <input id='upload-image' type="file" accept='image/*'>
           </a>
         </div>
       </div>

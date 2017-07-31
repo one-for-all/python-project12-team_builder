@@ -22,7 +22,7 @@
 
   exports.goToSearchedProjectsPage = function () {
     const searchTerm = document.getElementById('search-projects').value.trim()
-    const destinationURL = encodeURI(`?term=${searchTerm}`)
+    const destinationURL = encodeURI(`/?term=${searchTerm}`)
     window.location.href = destinationURL
   }
 

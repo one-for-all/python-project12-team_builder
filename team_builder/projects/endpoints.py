@@ -6,6 +6,7 @@ from rest_framework import status
 from django.urls import reverse
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from django.core.mail import send_mail
 
 from . import models
 from . import serializers
@@ -59,7 +60,7 @@ def project_list(request):
             return Response({
                 'success': False,
                 'error': serializer.errors
-            })
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -161,7 +162,7 @@ def application_detail(request, pk):
                 return Response({
                     'message': 'Application retracted'
                 }, status=status.HTTP_202_ACCEPTED)
-        elif action == 'accept':
+        elif action == 'approve':
             if application.position.project.owner != request.user:
                 return Response({
                     'error': 'Current User needs to be the owner to accept'
@@ -169,6 +170,14 @@ def application_detail(request, pk):
             else:
                 application.status = 1
                 application.save()
+                send_mail(
+                    'You application approved',
+                    'Your application to {} for {} has been approved.'.format(
+                        application.position.title,
+                        application.position.project.title),
+                    'team_builder@example.com',
+                    [application.applicant.email]
+                )
                 return Response({
                     'message': 'Application accepted'
                 }, status=status.HTTP_202_ACCEPTED)
@@ -180,10 +189,20 @@ def application_detail(request, pk):
             else:
                 application.status = 2
                 application.save()
+                send_mail(
+                    'You application rejected',
+                    'Your application to {} for {} has been rejected.'.format(
+                        application.position.title,
+                        application.position.project.title),
+                    'team_builder@example.com',
+                    [application.applicant.email]
+                )
                 return Response({
                     'message': 'Application rejected'
                 }, status=status.HTTP_202_ACCEPTED)
         else:
             return Response({
-                'error': 'Invalid action'
+                'error': {
+                    'non_field_errors': 'Invalid action'
+                }
             }, status=status.HTTP_400_BAD_REQUEST)

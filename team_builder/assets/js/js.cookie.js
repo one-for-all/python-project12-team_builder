@@ -12,8 +12,10 @@
 		registeredInModuleLoader = true;
 	}
 	if (typeof exports === 'object') {
-		module.exports = factory();
-		registeredInModuleLoader = true;
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = factory();
+			registeredInModuleLoader = true;
+		}
 	}
 	if (!registeredInModuleLoader) {
 		var OldCookies = window.Cookies;

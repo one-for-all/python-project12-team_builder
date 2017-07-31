@@ -11,8 +11,8 @@
     </nav>
   </div>
 
-  <div class="bounds circle--page">
-    <div class="circle--page--header grid-100">
+  <div id='body' class="bounds circle--page">
+    <div id='top' class="circle--page--header grid-100">
       <h2>Applications</h2>
     </div>
 
@@ -55,11 +55,12 @@
           <tr>
             <th>Applicant</th>
             <th class="circle--cell--right">Applicant Position</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {% for application in applications %}
-          <tr class="clickable-row" data-href="{% url 'accounts:profile_other' username=application.applicant.username %}">
+          <tr id='{{ application.id }}' class="clickable-row" data-href="{% url 'accounts:profile_other' username=application.applicant.username %}">
             <td>
               <h3>
                 {% if application.applicant.profile.name %}
@@ -73,6 +74,14 @@
             <td class="circle--cell--right">
               <span class="secondary-label">{{ application.position.title }}</span>
             </td>
+            <td>
+              {% if application.status != 1 %}
+              <button class='button button-small approve-button'>Approve</button>
+              {% endif %}
+              {% if application.status != 2 %}
+              <button class='button button-small reject-button'>Reject</button>
+              {% endif %}
+            </td>
           </tr>
           {% endfor %}
         </tbody>
@@ -84,5 +93,7 @@
 {% endblock %}
 
 {% block scripts %}
-
+<script src="{% static 'js/js.cookie.js' %}"></script>
+<script src="{% static 'js/utilities.js' %}"></script>
+<script src="{% static 'js/application_view.js' %}" charset="utf-8"></script>
 {% endblock %}

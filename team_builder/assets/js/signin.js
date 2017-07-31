@@ -11,7 +11,7 @@
     const xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
       if (xhr.readyState === XMLHttpRequest.DONE) {
-        if (xhr.status <= 200 && xhr.status <= 299) {
+        if (xhr.status >= 200 && xhr.status <= 299) {
           utilities.goToHomePage()
         } else {
           const error = JSON.parse(xhr.responseText).error

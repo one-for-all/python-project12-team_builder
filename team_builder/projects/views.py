@@ -8,10 +8,15 @@ from accounts import models as account_models
 
 def index(request):
     search_term = request.GET.get('term')
+    skill = request.GET.get('skill')
     if search_term:
         projects = models.SiteProject.objects.filter(
             Q(title__icontains=search_term) |
             Q(description__icontains=search_term)
+        )
+    elif skill:
+        projects = models.SiteProject.objects.filter(
+            positions__skill=skill
         )
     else:
         projects = models.SiteProject.objects.all()
@@ -33,8 +38,19 @@ def new_project(request):
 
 def view_project(request, pk):
     project = get_object_or_404(models.SiteProject, pk=pk)
+    if request.user.is_authenticated:
+        applied_positions = models.Position.objects.filter(
+            project=project).filter(applications__applicant=request.user)
+    else:
+        applied_positions = models.Position.objects.none()
+    pending_positions = applied_positions.filter(applications__status=0)
+    approved_positions = applied_positions.filter(applications__status=1)
+    rejected_positions = applied_positions.filter(applications__status=2)
     return render(request, 'project.html', context={
-        'project': project
+        'project': project,
+        'pending_positions': pending_positions,
+        'approved_positions': approved_positions,
+        'rejected_positions': rejected_positions
     })
 
 

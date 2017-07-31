@@ -27,6 +27,7 @@ class ViewProjectViewTest(TestCase):
     def test_success_view(self):
         user = create_user()
         project = create_project(user)
+
         resp = self.client.get(reverse('projects:view', kwargs={
             'pk': project.id
         }))

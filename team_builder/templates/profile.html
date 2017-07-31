@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% load static %}
 
 {% block content %}
   <div class="circle--actions--bar">
@@ -54,8 +55,12 @@
     <div class="grid-25 grid-push-5">
 
       <div class="circle--secondary--module">
-        <div class="circle--primary--avatar">
-
+        <div class="circle--primary--avatar avatar-collapse">
+          {% if user.profile.avatar %}
+          <img class='profile-avatar' src="{{ user.profile.avatar.url }}" alt="user avatar">
+          {% else %}
+          <img class='profile-avatar' src="{% static 'images/default_avatar.svg' %}" alt="user avatar">
+          {% endif %}
         </div>
       </div>
 

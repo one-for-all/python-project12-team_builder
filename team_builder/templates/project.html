@@ -35,16 +35,24 @@
 
         <ul class="circle--group--list">
           {% for position in project.positions.all %}
-          <li>
+          <li id='{{ position.id }}'>
             <h3>{{ position.title }}</h3>
             <p>{{ position.description }}</p>
             {% if position.skill %}
             <p>skill required: {{ position.skill }}</p>
             {% endif %}
-            {% if position.status != 2 %}
-            <a class="button button-primary">Apply</a>
+            {% if position.project.owner == user %}
+              <a class="button button-primary button-inactive">Owner Cannot Apply</a>
+            {% elif position in pending_positions %}
+                <a class="button button-primary button-inactive">Pending</a>
+            {% elif position in approved_positions %}
+              <a class="button button-primary button-inactive">Approved</a>
+            {% elif position in rejected_positions %}
+              <a class="button button-primary button-inactive">Rejected</a>
+            {% elif position.status == 0 %}
+              <a class="button button-primary apply-button">Apply</a>
             {% else %}
-            <a class="button button-primary button-inactive">Position Filled</a>
+              <a class="button button-primary button-inactive">Position Filled</a>
             {% endif %}
           </li>
           {% endfor %}
@@ -78,6 +86,7 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="{% static 'js/js.cookie.js' %}"></script>
 <script src="{% static 'js/utilities.js' %}"></script>
-<script src="{% static 'js/profile_view.js' %}"></script>
+<script src="{% static 'js/project_view.js' %}"></script>
 {% endblock %}
