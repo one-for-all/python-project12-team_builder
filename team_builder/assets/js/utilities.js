@@ -20,6 +20,12 @@
     body.insertBefore(errorBanner, topElement)
   }
 
+  exports.goToSearchedProjectsPage = function () {
+    const searchTerm = document.getElementById('search-projects').value.trim()
+    const destinationURL = encodeURI(`?term=${searchTerm}`)
+    window.location.href = destinationURL
+  }
+
   exports.goToSigninPage = function () {
     window.location.href = '/accounts/signin/'
   }

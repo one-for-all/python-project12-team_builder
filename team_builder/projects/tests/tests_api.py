@@ -88,6 +88,19 @@ class ProjectListTest(APITestCase):
         })
         self.assertTrue(status.is_client_error(resp.status_code))
 
+    def test_success_filter_by_term(self):
+        project = models.SiteProject.objects.order_by('?').first()
+        term = project.title.lower()
+        resp = self.client.get(reverse('projects:api_list'), data={
+            'term': term.upper()
+        })
+        resp_projects = resp.data.get('projects')
+        for project in resp_projects:
+            self.assertTrue(
+                (term in project.get('title').lower()) or
+                (term in project.get('description').lower())
+            )
+
 
 class ProjectTest(APITestCase):
     fixtures = ['fixture_0002.json']

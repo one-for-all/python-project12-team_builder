@@ -1,16 +1,23 @@
 from django.shortcuts import (render, Http404, redirect, reverse,
                               get_object_or_404)
-
+from django.db.models import Q
 from . import forms
 from . import models
 from accounts import models as account_models
 
 
 def index(request):
-    all_projects = models.SiteProject.objects.all()
+    search_term = request.GET.get('term')
+    if search_term:
+        projects = models.SiteProject.objects.filter(
+            Q(title__icontains=search_term) |
+            Q(description__icontains=search_term)
+        )
+    else:
+        projects = models.SiteProject.objects.all()
     all_skills = account_models.Skill.objects.all()
     return render(request, 'index.html', context={
-        'projects': all_projects,
+        'projects': projects,
         'all_skills': all_skills
     })
 

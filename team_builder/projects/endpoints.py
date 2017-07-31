@@ -4,6 +4,7 @@ from rest_framework.permissions import (IsAuthenticatedOrReadOnly,
 from rest_framework.response import Response
 from rest_framework import status
 from django.urls import reverse
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
 from . import models
@@ -20,7 +21,14 @@ def project_list(request):
     #   SUCCESS: List of Project Info Dictionaries
     #   ERROR: Error message
     if request.method == 'GET':
-        projects = models.SiteProject.objects.all()
+        search_term = request.GET.get('term')
+        if search_term:
+            projects = models.SiteProject.objects.filter(
+                Q(title__icontains=search_term) |
+                Q(description__icontains=search_term)
+            )
+        else:
+            projects = models.SiteProject.objects.all()
         serializer = serializers.ProjectSerializer(instance=projects,
                                                    many=True)
         return Response({

@@ -9,8 +9,12 @@
   "author": "Jay Li",
   "license": "ISC",
   "devDependencies": {
+    "babel-preset-env": "^1.6.0",
     "chai": "^4.1.0",
+    "gulp": "^3.9.1",
+    "gulp-mocha-phantomjs": "^0.12.1",
     "mocha": "^3.4.2",
+    "mocha-phantomjs-core": "^2.1.2",
     "sinon": "^2.3.8"
   },
   "standard": {
