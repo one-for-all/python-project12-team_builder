@@ -5,3 +5,4 @@ project12_env
 .tern-project
 __pycache__
 node_modules
+resources
