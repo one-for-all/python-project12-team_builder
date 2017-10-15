@@ -11,7 +11,7 @@ django.setup()
 from accounts.models import Skill
 
 
-with open('pugorugh/scripts/skills.json', 'r') as file:
+with open('scripts/skills.json', 'r') as file:
     data = json.load(file)
     for skill in data:
         Skill.objects.create(name=skill)
