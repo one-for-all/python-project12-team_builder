@@ -8,4 +8,8 @@
 5. python manage.py migrate
 6. python scripts/data_import.py
 
-Now, all set. run the project as usual by: python manage.py runserver
+Now, all set, run the project as usual by: python manage.py runserver
+
+### Notes:
+1. Notification on application status appears on viewing the applied project
+2. All fields for project creation are required
