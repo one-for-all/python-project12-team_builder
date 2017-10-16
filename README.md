@@ -13,5 +13,6 @@ DebuggingServer localhost:1025
 Now, all set, run the project as usual by: python manage.py runserver
 
 ### Notes:
-1. Notification on application status appears on viewing the applied project
+1. Notification on application status appears on the terminal with local email
+ server
 2. All fields for project creation are required
