@@ -7,6 +7,8 @@
 4. Change directory into team_builder
 5. python manage.py migrate
 6. python scripts/data_import.py
+7. Start a local email server for testing: python -m smtpd -n -c
+DebuggingServer localhost:1025
 
 Now, all set, run the project as usual by: python manage.py runserver
 
